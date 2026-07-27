@@ -24,7 +24,7 @@ SELECT * FROM products WHERE category = 'Gifts'--' AND released = 1
 
 I used the quotation mark to close the parameter string, and `--` to comment out the rest of the query. Now, the query does not only select products that have the released flag. In the URL, I inject
 
-<img src="img/payload.png" height="150" alt="Malicious payload">
+![Malicious payload](img/payload.png)
 
 and the screen goes from showing 3 products to 4, proving that the released part of the query was ignored.
 
@@ -36,7 +36,7 @@ SELECT * FROM products WHERE category = 'Gifts' OR 1=1--' AND released = 1
 
 `1=1` always evaluates to `TRUE`, and everything after is commented out and ignored. When injecting via Burp Suite, the payload in the URL needs to be encoded via `Cmd+U`.
 
-<img src="img/payload2.png" height="150" alt="Malicious payload 2">
+![Malicious payload](img/payload2.png)
 
 The page changes to show all products and displays
 
