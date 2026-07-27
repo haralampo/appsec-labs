@@ -12,13 +12,13 @@ Have the website display unreleased projects by injecting an exploit.
 ## Exploitation
 First, I chose a category (i.e. "Gifts") to see what the URL would show regarding the query. The payload showed `/filter?category=Gifts`. I know from the lab description that this is equivalent to the query
 
-sql```
+```sql
 SELECT * FROM products WHERE category = 'Gifts' AND released = 1
 ```
 
 I am assuming that the category parameter `Gifts` is taken directly from the URL. To show unreleased products, I need to make `AND released = 1` be ignored. If I inject `Gifts'--`, the query becomes
 
-sql```
+```sql
 SELECT * FROM products WHERE category = 'Gifts'--' AND released = 1
 ```
 
@@ -30,7 +30,7 @@ and the screen goes from showing 3 products to 4, proving that the released part
 
 In order to display all products, including unreleased, regardless of category, I need to construct a query that evaluates to `TRUE` for every table entry. If I inject `Gifts' OR 1=1--`, the query becomes
 
-sql```
+```sql
 SELECT * FROM products WHERE category = 'Gifts' OR 1=1--' AND released = 1
 ```
 
