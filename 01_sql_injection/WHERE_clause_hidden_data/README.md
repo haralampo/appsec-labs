@@ -36,7 +36,7 @@ SELECT * FROM products WHERE category = 'Gifts' OR 1=1--' AND released = 1
 
 `1=1` always evaluates to `TRUE`, and everything after is commented out and ignored. When injecting via Burp Suite, the payload in the URL needs to be encoded via `Cmd+U`.
 
-<img src="img/payload2.png" width="150" alt="Malicious payload 2">
+<img src="img/payload2.png" height="150" alt="Malicious payload 2">
 
 The page changes to show all products and displays
 
