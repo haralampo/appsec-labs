@@ -20,11 +20,11 @@ I assumed that the category parameter `Gifts` was taken directly from the URL. T
 SELECT * FROM products WHERE category = 'Gifts'--' AND released = 1
 ```
 
-I used the quotation mark to close the parameter string, and `--` to comment out the rest of the query. Now, the query did not only select products that had the released flag. Injecting
+I used the quotation mark to close the parameter string, and `--` to comment out the rest of the query. Now, the query did not only select products that had the released flag. Injecting the following payload into the URL:
 
 ![Malicious payload](img/payload.png)
 
-into the URL caused the screen to go from showing 3 products to 4, proving that the released part of the query was ignored.
+caused the screen to go from showing 3 products to 4, proving that the released part of the query was ignored.
 
 In order to display all products, including unreleased, regardless of category, I needed to construct a query that evaluated to `TRUE` for every table entry. If I injected `Gifts' OR 1=1--`, the query became
 
