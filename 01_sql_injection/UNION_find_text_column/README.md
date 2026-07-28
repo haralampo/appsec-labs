@@ -8,21 +8,21 @@ Difficulty: PRACTITIONER
 ![Lab description](img/description.png)
 
 ## Exploitation
-The objective is to make the database retrieve the string `Vv7Qcz`. Ultimately, I will attempt to inject a UNION query to accomplish this, but I first need to figure out how many columns the website returns from the database. I am told the vulnerability is in the product category filter, so I choose a category and intercept the request. I am able to see the payload `/filter?category=Gifts` and, using the [UNION column count method](https://portswigger.net/web-security/sql-injection/union-attacks/lab-determine-number-of-columns), I determine the query returns 3 columns.
+The objective was to make the database retrieve the string `Vv7Qcz`. Ultimately, I would attempt to inject a UNION query to accomplish this, but I first needed to figure out how many columns the website returned from the database. I was told the vulnerability was in the product category filter, so I chose a category and intercepted the request. I was able to see the payload `/filter?category=Gifts` and, using the [UNION column count method](https://portswigger.net/web-security/sql-injection/union-attacks/lab-determine-number-of-columns), I determined the query returned 3 columns.
 
-Next, I need to determine which columns can hold a string data type so that it can retrieve my string. I start by trying to inject the string `abc` into the first column:
+Next, I needed to determine which columns could hold a string data type so that it could retrieve my string. I started by trying to inject the string `abc` into the first column:
 
 ![Payload](img/payload.png)
 
-and receive an internal server error. This means the first column does not return the string data type. I try again with the second column:
+and received an internal server error. This meant the first column did not return the string data type. I tried again with the second column:
 
 ![Payload 2](img/payload2.png)
 
-and the request goes through. This is validated by the `abc` shown among the product list:
+and the request went through. This was validated by the `abc` shown among the product list:
 
 !['abc' retrieval](img/abc_retrieval.png)
 
-Now, I can inject the string given by the lab.
+Now, I could inject the string given by the lab.
 
 ![String retrieval](img/string_retrieval.png)
 

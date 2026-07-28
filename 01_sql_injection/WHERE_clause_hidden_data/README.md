@@ -8,34 +8,34 @@ Difficulty: APPRENTICE
 ![Lab description](img/description.png)
 
 ## Exploitation
-I start by choosing a category (i.e. "Gifts") to see what the URL would show regarding the query. The payload shows `/filter?category=Gifts`. I know from the lab description that this is equivalent to the query
+I started by choosing a category (i.e. "Gifts") to see what the URL would show regarding the query. The payload showed `/filter?category=Gifts`. I knew from the lab description that this was equivalent to the query
 
 ```sql
 SELECT * FROM products WHERE category = 'Gifts' AND released = 1
 ```
 
-I am assuming that the category parameter `Gifts` is taken directly from the URL. To show unreleased products, I need to make `AND released = 1` be ignored. If I inject `Gifts'--`, the query becomes
+I assumed that the category parameter `Gifts` was taken directly from the URL. To show unreleased products, I needed to make `AND released = 1` be ignored. If I injected `Gifts'--`, the query became
 
 ```sql
 SELECT * FROM products WHERE category = 'Gifts'--' AND released = 1
 ```
 
-I used the quotation mark to close the parameter string, and `--` to comment out the rest of the query. Now, the query does not only select products that have the released flag. Injecting
+I used the quotation mark to close the parameter string, and `--` to comment out the rest of the query. Now, the query did not only select products that had the released flag. Injecting
 
 ![Malicious payload](img/payload.png)
 
-into the URL causes the screen to go from showing 3 products to 4, proving that the released part of the query was ignored.
+into the URL caused the screen to go from showing 3 products to 4, proving that the released part of the query was ignored.
 
-In order to display all products, including unreleased, regardless of category, I need to construct a query that evaluates to `TRUE` for every table entry. If I inject `Gifts' OR 1=1--`, the query becomes
+In order to display all products, including unreleased, regardless of category, I needed to construct a query that evaluated to `TRUE` for every table entry. If I injected `Gifts' OR 1=1--`, the query became
 
 ```sql
 SELECT * FROM products WHERE category = 'Gifts' OR 1=1--' AND released = 1
 ```
 
-`1=1` always evaluates to `TRUE`, and everything after is commented out and ignored. When injecting via Burp Suite, the payload in the URL needs to be encoded via `Cmd+U`.
+`1=1` always evaluates to `TRUE`, and everything after was commented out and ignored. When injecting via Burp Suite, the payload in the URL needed to be encoded via `Cmd+U`.
 
 ![Malicious payload](img/payload2.png)
 
-The page changes to show all products and displays
+The page changed to show all products and displayed
 
 ![Success banner](img/success.png)

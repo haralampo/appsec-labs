@@ -8,17 +8,17 @@ Difficulty: APPRENTICE
 ![Lab description](img/description.png)
 
 ## Exploitation
-I am assuming that the query to log in looks something like 
+I assumed that the query to log in looked something like 
 
 ```sql
 SELECT * FROM users WHERE username = '<USER>' AND password = '<PASS>'
 ```
 
-When I attempt to log in as user `hello` and password `bye` and intercept the request via Burp Suite, I can see the POST data:
+When I attempted to log in as user `hello` and password `bye` and intercepted the request via Burp Suite, I could see the POST data:
 
 ![Payload](img/payload.png)
 
-I want to bypass the need for a password by commenting it out of the query. Just like URL parameters, the username field is vulnerable to injection. Thus, I am going to log in with the username `administrator'--` in the website's login field. The password doesn't matter since it will not be used. This allows me to successfully log in as the administrator:
+I wanted to bypass the need for a password by commenting it out of the query. Just like URL parameters, the username field was vulnerable to injection. Thus, I logged in with the username `administrator'--` in the website's login field. The password did not matter since it would not be used. This allowed me to successfully log in as the administrator:
 
 ![Administrator account](img/admin.png)
 
