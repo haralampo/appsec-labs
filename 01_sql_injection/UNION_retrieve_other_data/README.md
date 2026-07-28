@@ -14,7 +14,7 @@ Next, I drafted a payload that would allow me to attach the desired data into th
 
 ![Payload](img/payload.png)
 
-The injected payload had to be encoded (i.e. `'+UNION+SELECT+username,+password+from+users--`) so that the URL could interpret it; Burp Suite handled this encoding automatically. The success of this injection was validated by the updated page displaying usernames and passwords among the products.
+Note that the injected payload has to be encoded (i.e. `'+UNION+SELECT+username,+password+from+users--`) so that the URL can interpret it; Burp Suite handles this encoding automatically. The success of this injection was validated by the updated page displaying usernames and passwords among the products.
 
 ![Page results](img/page_results.png)
 

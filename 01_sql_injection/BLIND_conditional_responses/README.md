@@ -8,7 +8,7 @@ Difficulty: PRACTITIONER
 ![Lab description](img/description.png)
 
 ## Exploitation
-I was told that the tracking cookie value was used for an SQL query, so I used this as my injection point. I assumed that the SQL query looked something like:
+I was told that the tracking cookie value would be used for an SQL query, so I used this as my injection point. I assumed that the SQL query looked something like:
 
 ``` sql
 SELECT TrackingId FROM TrackedUsers WHERE TrackingId = 'abc'
@@ -39,7 +39,7 @@ Next, I worked on figuring out the password character by character. For the firs
 
 `' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='administrator')='a`
 
-This would evaluate to True if the first character of the password was 'a'. This was a tedious process as each character could be a letter a-z or number 1-9, and I had to perform this check for 20 characters. Thus, I utilized Burp Intruder to automate the process. It tried all possible characters for each character index, marking which ones caused the "Welcome back" message to appear, signifying a correct character placement. It eventually gave me the password `6y8nv5cgoye3ysge1r1k`, which I used to log in to the administrator account.
+This would evaluate to True if the first character of the password was 'a'. I had to perform this check for 20 characters, testing all possible values (letters a-z and numbers 1-9), which would prove to be tedious. Thus, I utilized Burp Intruder to automate the process. It tried all possible characters for each character index, marking which ones caused the "Welcome back" message to appear, signifying a correct character placement. It eventually led me to the password `6y8nv5cgoye3ysge1r1k`, which I used to log in to the administrator account.
 
 ![Login as administrator](img/login.png)
 
