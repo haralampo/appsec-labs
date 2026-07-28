@@ -24,7 +24,7 @@ and the request goes through:
 
 Thus, I know the product category query returns 3 columns.
 
-# Second method
+### Second method
 Another method involves trying to order the query result by incrementing column indexes, such as `' ORDER BY 1--`. The idea is that, if you get an error, you were trying to order by a column that doesn't exist, and so you know that the query returns one less than that number of columns.
 
 I start by ordering by column 1 and increment until I get an error. I get my first internal server error message when injecting `' ORDER BY 4--`, so I know there are 3 columns. This matches my result from using the first method.
