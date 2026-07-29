@@ -27,6 +27,7 @@ and the page showed:
 This made sense because `'1'='1'` evaluates to True. I tried again with `'1'='2'` and the "Welcome back" message disappeared, which checked out. Next, I validated the existence of the `users` table and the `administrator` username with the following payloads:
 
 `' AND (SELECT 'a' FROM users LIMIT 1) = 'a`
+
 `' AND (SELECT 'a' FROM users WHERE username = 'administrator') = 'a`
 
 If the table and username existed, `'a'` would be selected, and `'a'='a'` would evaluate to True. Expectedly, the website showed the "Welcome back" message for both payloads. Next, I needed to figure out how long the password was. I sent the following payload with varying length values until I determined that the password was 20 characters long:
@@ -35,7 +36,7 @@ If the table and username existed, `'a'` would be selected, and `'a'='a'` would 
 
 I knew this because the screen showed the "Welcome back" message for `> 19`, meaning it evaluated to True, but disappeared for `> 20`.
 
-Next, I worked on figuring out the password character by character. For the first character, I used the payload:
+Finally, I worked on figuring out the password character by character. For the first character, I used the payload:
 
 `' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='administrator')='a`
 
