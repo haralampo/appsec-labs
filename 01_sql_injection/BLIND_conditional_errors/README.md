@@ -26,7 +26,7 @@ I tried selecting a random table name to be more certain that these inputs were 
 
 `TrackingId=abc' || (SELECT '' FROM random_table) || '` 
 
-and got an error, proving the direct query input likely. To further prove this while also checking for the existence of a `users` table, I sent 
+and got an error, proving the direct query input likely. To further prove this while also checking for the existence of a `users` table, I sent:
 
 `TrackingId=abc' || (SELECT '' FROM users WHERE ROWNUM = 1) || '` 
 
@@ -44,7 +44,7 @@ I used this format to check for the existence of the `administrator` user:
 
 This returned an error, proving the username exists. If it didn't exist, no cases would be selected and thus no error triggered from `0/1`. Instead, it would evaluate to `NULL` which Oracle treats as an empty string. If the clause after the `WHEN` statement was false, the `ELSE` statement would be selected and evaluate to an empty string, causing no error. Knowing this, I could input statements regarding the password into the `WHEN` statement; if an error returns, this statement is true.
 
-I used Burp Intruder to help automate the process. After figuring out the password was 20 characters long, I repeatedly used a version of the following payload:
+I used Burp Intruder to help automate the process. After determining that the password was 20 characters long, I repeatedly sent a version of the following payload:
 
 `TrackingId=abc' || (SELECT CASE WHEN (SUBSTR(password, 1, 1) = 'a') THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username = 'administrator') || '`
 
