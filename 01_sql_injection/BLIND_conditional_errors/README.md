@@ -10,7 +10,7 @@ Difficulty: PRACTITIONER
 ## Exploitation
 I was told that the tracking cookie value would be used for an SQL query, and also that the application would not return the query results, but would give error messages. I started by intercepting the request and testing out different payloads to get some intel on the backend.
 
-Let's say the cookie value was `TrackingId=abc`. I tried inserting one quotatin mark (`TrackingId=abc'`) and got an error. I tried with two (`TrackingId=abc''`) and it went through fine. This showed that a syntax error regarding the cookie value would display an error.
+Let's say the cookie value was `TrackingId=abc`. I tried inserting one quotation mark (`TrackingId=abc'`) and got an error. I tried with two (`TrackingId=abc''`) and it went through fine. This showed that a syntax error regarding the cookie value would display an error.
 
 I then tried adding a simple SQL query: 
 
@@ -42,7 +42,7 @@ I used this format to check for the existence of the `administrator` user:
 
 `TrackingId=abc' || (SELECT CASE WHEN (1=1) THEN TO_CHAR(1/0) ELSE '' END FROM users WHERE username = 'administrator') || '` 
 
-This returned an error, proving the username exists. If it didn't exist, no cases would be selected and thus no error triggered from `0/1`. Instead, it would evaluate to `NULL` which Oracle treats as an empty string. If the clause after the `WHEN` statement was false, the `ELSE` statement would be selected and evaluate to an empty string, causing no error. Knowing this, I could input statements regarding the password into the `WHEN` statement; if an error returns, this statement is true.
+This returned an error, proving the username exists. If it didn't exist, no cases would be selected and thus no error triggered from `1/0`. Instead, it would evaluate to `NULL` which Oracle treats as an empty string. If the clause after the `WHEN` statement was false, the `ELSE` statement would be selected and evaluate to an empty string, causing no error. Knowing this, I could input statements regarding the password into the `WHEN` statement; if an error returns, this statement is true.
 
 I used Burp Intruder to help automate the process. After determining that the password was 20 characters long, I repeatedly sent a version of the following payload:
 
