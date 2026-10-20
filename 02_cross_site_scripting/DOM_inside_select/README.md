@@ -2,8 +2,8 @@
 
 ![Lab title](img/title.png)
 
-Lab-Link: <https://portswigger.net/web-security>  
-Difficulty: [PRACTITIONER]
+Lab-Link: <https://portswigger.net/web-security/cross-site-scripting/dom-based/lab-document-write-sink-inside-select-element>  
+Difficulty: PRACTITIONER
 
 ![Lab description](img/description.png)
 
