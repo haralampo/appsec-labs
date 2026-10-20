@@ -50,7 +50,7 @@ cat > "${LAB_DIR}/README.md" << 'EOF'
 ![Lab title](img/title.png)
 
 Lab-Link: <https://portswigger.net/web-security>  
-Difficulty: [APPRENTICE]
+Difficulty: APPRENTICE
 
 ![Lab description](img/description.png)
 
