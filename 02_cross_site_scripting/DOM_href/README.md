@@ -12,7 +12,7 @@ I first headed to the "Submit Feedback" page as this was where the vulnerability
 
 ![HTML code showing vulnerability](img/html.png)
 
-I then pressed the "Back" button, at which point I was met with an alert and a success banner:
+I then pressed the "Back" button, at which point I was met with an alert and success banner:
 
 ![Alert](img/alert.png)
 
