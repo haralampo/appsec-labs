@@ -12,7 +12,7 @@ I started by clicking on a post and commenting the unique string `a1b2c3`. I ret
 
 ![Inspect panel](img/inspect.png)
 
-I drafted another comment, this time putting `javascript:alert(document.domain)` in the "Website" field. I returned to the post and clicked my user's name, after which I received an alert:
+I drafted another comment, this time putting `javascript:alert(1)` in the "Website" field. I returned to the post and clicked my user's name, after which I received an alert:
 
 ![XSS Alert](img/alert.png)
 
